@@ -1,0 +1,47 @@
+{
+  "name": "yaojuntian",
+  "version": "1.0.0",
+  "description": "https://github.com/YaoJunTian",
+  "main": "http:www.yaojuntian.com",
+  "scripts": {
+    "test": "",
+    "start:dev": "cross-env NODE_ENV='dev' supervisor ./build/nodeuii/app.js",
+    "start:prod": "cross-env NODE_ENV='prod' pm2 start ./build/nodeuii/pm2.json",
+    "stop": "pm2 stop all",
+    "gulp:dev": "cross-env NODE_ENV='dev' gulp",
+    "gulp:prod": "cross-env NODE_ENV='prod' gulp",
+    "webpack:dev": "cross-env NODE_ENV='development' webpack --watch --progress --colors",
+    "webpack:prod": "cross-env NODE_ENV='production' webpack"
+  },
+  "author": "yaojuntian",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^5.1.6",
+    "ejs": "^2.6.1",
+    "koa": "^2.5.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^4.0.3",
+    "koa-views": "^6.1.4",
+    "lodash": "^4.17.10",
+    "log4js": "^2.8.0",
+    "path": "^0.12.7",
+    "pm2": "^2.10.4",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "cross-spawn": "^6.0.5",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-watch": "^5.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^2.1.5",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.11.1",
+    "webpack-cli": "^3.0.3"
+  }
+}

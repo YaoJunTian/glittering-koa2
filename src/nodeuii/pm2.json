@@ -1,0 +1,9 @@
+{
+    "name": "koa",
+    "script": "./src/nodeuii/app.js",
+    "log_data_format": "YYYY-MM-DD  HH:mm Z",
+    "out_file": "log/koa.pm2.log",
+    "watch": true,
+    "instances": "2",
+    "exec_mode": "cluster"
+}

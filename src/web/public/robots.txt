@@ -1,0 +1,5 @@
+User-agent : *
+
+Disallow : /config
+Disallow : /models
+Disallow : /test
