@@ -1,12 +1,13 @@
-const webpack = require('webpack');
 const fs = require('fs');
-const path = require('path');
 const _ = require('lodash');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
 
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+
+//配置多入口
 const pagespath = path.join(__dirname, '../src/web/views');
-// const widgetpath = path.join(__dirname, '../src/web/widget');
-//多入口拼接
 const _entry = {};
 fs.readdirSync(pagespath).map((f, i) => {
     fs.readdirSync(path.join(pagespath, f)).map((filename, index) => {
@@ -15,18 +16,18 @@ fs.readdirSync(pagespath).map((f, i) => {
         };
     });
 });
-console.log(_entry);
+
 // 配置输出路径
 const _outputPath = path.join(__dirname, '../build/web');
+
 // 配置双环境输出文件名
-const _outputFilenameDev =  'public/scripts/[name].bundle.js';
+const _outputFilenameDev = 'public/scripts/[name].bundle.js';
 const _outputFilenameProd = 'public/scripts/[name].bundle.[hash:5].js';
+
 //配置别名
 const _resolve = { extensions: ['.js', '.css'] };
-//预留双环境前缀
-const _publicPathDev = '';
-const _publicPathProd = '';
 
+// 配置js文件处理方式
 const _module = {
     rules: [{
         test: /\.js$/,
@@ -37,44 +38,50 @@ const _module = {
                 presets: ['env']
             }
         }
+    },{
+        test: /\.html$/,
+        use:{loader:'html-loader'}
     }]
-}
-
+};
+//克隆双环境loader
 const _devLoaders = _.clone(_module.rules);
 const _prodLoaders = _.clone(_module.rules);
-//img上线环境改戳
+// dev图片处理
 _devLoaders.push({
     test: /\.(png|jpg|gif|eot|woff|woff2|ttf|svg|otf|jpeg)$/,
-    loader: 'url-loader?limit=2048&name=nodeuii/assets/images/[name].[ext]'
+    loader: 'url-loader?limit=2048&name=assets/images/[name].[ext]'
 });
-_prodLoaders.push({
-    test: /\.(png|jpg|gif|eot|woff|woff2|ttf|svg|otf|jpeg)$/,
-    loader: 'url-loader?limit=2048&name=nodeuii/assets/images/[hash:7].[ext]'
-});
-// css上线环境为压缩
+// dev css处理
 _devLoaders.push({
     test: /\.css$/,
     exclude: /node_modules/,
-    use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [
-            { loader: 'css-loader', options: { importLoaders: 1} },
-            { loader: 'postcss-loader', options: { path: path.join(__dirname, '../postcss.config.js') } }
-        ]
-    })
+    use: [
+        MiniCssExtractPlugin.loader,
+        { loader: 'css-loader', options: { importLoaders: 1 } },
+        { loader: 'postcss-loader', options: { path: path.join(__dirname, '../postcss.config.js') } }
+    ]
 });
+// prod图片处理
+_prodLoaders.push({
+    test: /\.(png|jpg|gif|eot|woff|woff2|ttf|svg|otf|jpeg)$/,
+    loader: 'url-loader?limit=2048&name=assets/images/[hash:7].[ext]'
+});
+// prod css处理
 _prodLoaders.push({
     test: /\.css$/,
     exclude: /node_modules/,
-    use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [
-            { loader: 'css-loader', options: { importLoaders: 1,minimize: true} },
-            { loader: 'postcss-loader', options: { path: path.join(__dirname, '../postcss.config.js') } }
-        ]
-    })
+    use: [
+        MiniCssExtractPlugin.loader,
+        { loader: 'css-loader', options: { importLoaders: 1, minimize: true } },
+        { loader: 'postcss-loader', options: { path: path.join(__dirname, '../postcss.config.js') } }
+    ]
 });
-// 集成配置
+
+
+//预留双环境前缀
+const _publicPathDev = '';
+const _publicPathProd = '';
+
 const webpackConfig = {
     dev: {
         entry: _entry,
@@ -89,6 +96,16 @@ const webpackConfig = {
         resolve: _resolve,
     },
     prod: {
+        optimization: {
+            minimizer: [
+                new UglifyJsPlugin({
+                    cache: true,
+                    parallel: true,
+                    sourceMap: true
+                }),
+                new OptimizeCSSAssetsPlugin({})
+            ]
+        },
         entry: _entry,
         output: {
             path: _outputPath,

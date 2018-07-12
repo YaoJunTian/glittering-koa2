@@ -3,7 +3,9 @@ const postcssPresetEnv =  require('postcss-preset-env');
 module.exports = {
     ident: 'postcss',
     plugins: () => [
-        postcssPresetEnv()
+        postcssPresetEnv({
+            stage: 2
+          })
         // require('postcss-import')(),
         // require('stylelint')(),
         // require('autoprefixer')(),

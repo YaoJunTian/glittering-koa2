@@ -17,8 +17,8 @@ gulp.task('gulpCommen', function () {
 });
 //pm2启动文件
 gulp.task('gulpPm2', function () {
-  return gulp.src(['./src/web/nodeuii/pm2.json'])
-    .pipe(gulp.dest('build/web/nodeuii/pm2.json'));
+  return gulp.src(['./src/nodeuii/pm2.json'])
+    .pipe(gulp.dest('build/nodeuii'));
 });
 // 配置上线环境
 gulp.task('gulpProd', function () {
@@ -44,5 +44,5 @@ gulp.task('gulpDev', function () {
     .pipe(gulp.dest('build/nodeuii'));
   //监听文件变化
 });
-gulp.task('default', [process.env.NODE_ENV === "prod" ? 'gulpProd' : 'gulpDev', 'gulpCommen', 'gulpPm2', 'library']);
+gulp.task('default', process.env.NODE_ENV === "prod" ? ['gulpProd', 'gulpCommen', 'gulpPm2', 'library'] : ['gulpDev', 'gulpCommen', 'gulpPm2', 'library']);
 // gulp.task('default', [process.env.NODE_ENV === "prod" ? 'gulpProd' : 'gulpDev', 'gulpCommen', 'gulpPm2', 'library','gulpEjs']);

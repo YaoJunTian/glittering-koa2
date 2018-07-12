@@ -12,6 +12,6 @@ module.exports = (env,_)=>{
     }else if(env === 'prod'){
         return  _.extend(config,configProd);
     }else{
-        return  _.extend(config,configDev);
+        return  _.extend(config,configProd);
     };
 };

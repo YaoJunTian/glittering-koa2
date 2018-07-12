@@ -1,0 +1,6 @@
+:root {
+    --fontSize: 1vw;
+    --mainColor: black;
+    --secondaryColor: lab(32.5 38.5 -47.6 / 90%);
+  }
+body{background-color:var(--mainColor);font-size:calc(var(--fontSize)*6);color:green;display: -webkit-box;}
